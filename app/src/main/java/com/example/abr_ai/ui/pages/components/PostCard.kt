@@ -16,9 +16,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.abr_ai.ui.pages.data.PostModel
 
 @Composable
-fun PostCard() {
+fun PostCard(
+    model: PostModel
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -33,17 +36,17 @@ fun PostCard() {
     ) {
         Column {
             Text(
-                "Название поста",
+                model.title,
                 modifier = Modifier.padding(6.dp),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                "10 мин 10 просмотров",
+                "${model.minutes} мин ${model.views} просмотров",
                 modifier = Modifier.padding(horizontal = 6.dp)
             )
             Text(
-                "СтатьиТекстСтатьиТекстСтатьиТекстСтатьиТекстСтатьиТекстСтатьdasdaasddddddddddasajbkfsadfjsafsdafshadfиТекстСтатьиТекстСтатьиТекстСтатьиТекстСтатьиТекстСтать",
+                model.postText,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 12.dp),
