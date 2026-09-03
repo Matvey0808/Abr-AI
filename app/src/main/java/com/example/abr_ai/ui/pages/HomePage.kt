@@ -1,9 +1,12 @@
 package com.example.abr_ai.ui.pages
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -11,17 +14,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.abr_ai.ui.pages.data.PostViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.abr_ai.ui.pages.components.PostCard
-import com.example.abr_ai.ui.pages.data.PostModel
+import com.example.abr_ai.ui.pages.data.PostState
+import com.example.abr_ai.ui.pages.data.network.RequestPost
 
 @ExperimentalMaterial3Api
 @Composable
-fun HomePage() {
+fun HomePage(viewModel: PostViewModel = viewModel()) {
+    val statePosts by viewModel.postState.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -42,18 +50,27 @@ fun HomePage() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            LazyColumn {
-                item {
-                    PostCard(
-                        model = PostModel(
-                            title = "Типо название лол",
-                            minutes = "10",
-                            views = "21",
-                            postText = "Привит хабр! сегодня ми будим кушатс вкусниц мадильики от апенаи. Мы ночэнаем!"
-                        )
-                    )
+            when (statePosts) {
+                is PostState.Loading -> {
+                    CircularProgressIndicator()
+                }
+
+                is PostState.Success -> {
+                    LazyColumn(Modifier.fillMaxSize()) {
+                        items((statePosts as PostState.Success).posts.posts) { post ->
+                            PostCard(
+                                post
+                            )
+                        }
+                    }
+                }
+
+                is PostState.Error -> {
+                    Text((statePosts as PostState.Error).message)
                 }
             }
         }
