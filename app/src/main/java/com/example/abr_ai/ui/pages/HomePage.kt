@@ -13,6 +13,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +33,7 @@ import com.example.abr_ai.ui.pages.data.network.RequestPost
 @Composable
 fun HomePage(viewModel: PostViewModel = viewModel()) {
     val statePosts by viewModel.postState.collectAsState()
+    val stateIndicator = rememberPullToRefreshState()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -60,11 +64,26 @@ fun HomePage(viewModel: PostViewModel = viewModel()) {
                 }
 
                 is PostState.Success -> {
-                    LazyColumn(Modifier.fillMaxSize()) {
-                        items((statePosts as PostState.Success).posts.posts) { post ->
-                            PostCard(
-                                post
+                    PullToRefreshBox(
+                        isRefreshing = viewModel.isLoading.collectAsState().value,
+                        onRefresh = { viewModel.updatePosts() },
+                        state = stateIndicator,
+                        indicator = {
+                            Indicator(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                state = stateIndicator,
+                                isRefreshing = viewModel.isLoading.collectAsState().value,
+                                modifier = Modifier.align(Alignment.TopCenter)
                             )
+                        }
+                    ) {
+                        LazyColumn(Modifier.fillMaxSize()) {
+                            items((statePosts as PostState.Success).posts.posts) { post ->
+                                PostCard(
+                                    post
+                                )
+                            }
                         }
                     }
                 }
