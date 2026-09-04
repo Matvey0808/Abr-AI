@@ -56,7 +56,7 @@ fun HomePage(viewModel: PostViewModel = viewModel()) {
         ) {
             when (statePosts) {
                 is PostState.Loading -> {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
 
                 is PostState.Success -> {
