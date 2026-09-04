@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.abr_ai.ui.pages.data.PostViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.abr_ai.ui.pages.components.PagesBar
 import com.example.abr_ai.ui.pages.components.PostCard
 import com.example.abr_ai.ui.pages.data.PostState
 import com.example.abr_ai.ui.pages.data.network.RequestPost
@@ -83,6 +84,9 @@ fun HomePage(viewModel: PostViewModel = viewModel()) {
                                 PostCard(
                                     post
                                 )
+                            }
+                            item {
+                                PagesBar()
                             }
                         }
                     }
