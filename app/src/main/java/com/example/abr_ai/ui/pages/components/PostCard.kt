@@ -51,6 +51,22 @@ fun PostCard(
         Column(
             Modifier.fillMaxHeight()
         ) {
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    model.user,
+                    modifier = Modifier.padding(6.dp),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    model.date.replace(Regex("\\s+"), " ").trim(),
+                    modifier = Modifier.padding(6.dp),
+                    fontSize = 14.sp,
+                )
+            }
             Text(
                 model.title,
                 modifier = Modifier.padding(6.dp),
@@ -62,7 +78,7 @@ fun PostCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (model.complexity != null) {
-                    Spacer(modifier = Modifier.width(6.0.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Icon(
                         imageVector = Icons.Default.Speed,
                         contentDescription = "views"
@@ -72,6 +88,7 @@ fun PostCard(
                         modifier = Modifier.padding(horizontal = 6.dp)
                     )
                 }
+                Spacer(modifier = Modifier.width(6.dp))
                 Icon(
                     imageVector = Icons.Default.AccessTime,
                     contentDescription = "time",
@@ -81,6 +98,7 @@ fun PostCard(
                     model.time,
                     modifier = Modifier.padding(horizontal = 6.dp)
                 )
+                Spacer(modifier = Modifier.width(6.dp))
                 Icon(
                     imageVector = Icons.Outlined.Visibility,
                     contentDescription = "time",
