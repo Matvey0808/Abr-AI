@@ -64,7 +64,11 @@ fun PagesBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 viewModel.listPages.collectAsState().value.forEach { item ->
-                    ButtonPage({ viewModel.switchPages(item) }, viewModel, item)
+                    if (item == -1) {
+                        Text("...")
+                    } else {
+                        ButtonPage({ viewModel.switchPages(item) }, viewModel, item)
+                    }
                 }
             }
             IconButton(

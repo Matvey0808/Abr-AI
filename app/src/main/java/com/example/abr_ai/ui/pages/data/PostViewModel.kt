@@ -18,7 +18,7 @@ class PostViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     private val _page = MutableStateFlow(1)
     private val _lastPage = MutableStateFlow(379 - 1)
-    private val _listPages = MutableStateFlow(listOf(1, 2, 3))
+    private val _listPages = MutableStateFlow<List<Int>>(emptyList())
     val postState: StateFlow<PostState> = _postState.asStateFlow()
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
     val page: StateFlow<Int> = _page.asStateFlow()
@@ -57,14 +57,19 @@ class PostViewModel : ViewModel() {
 
     fun switchPages(number: Int) {
         _page.value = number
+        val lastPage = 379
 
         val start = number - 1
         val end = number + 1
 
-        if (_page.value >= 3) {
-            _listPages.value = listOf(start, _page.value, end)
+        _listPages.value = if (number != lastPage) {
+            when {
+                number >= lastPage - 1 -> listOf(1, -1, number - 1, number, number + 1)
+                number >= 3 -> listOf(1, -1, start, _page.value, end, -1, lastPage)
+                else -> listOf(1, 2, 3, -1, lastPage)
+            }
         } else {
-            _listPages.value = listOf(1, 2, 3)
+            listOf(1, -1, number - 2, number - 1, number)
         }
     }
 }
