@@ -1,5 +1,6 @@
 package com.example.abr_ai.ui.pages.components
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,12 +22,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.abr_ai.ui.pages.data.PostViewModel
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.map
 
 @Composable
-fun PagesBar() {
+fun PagesBar(
+    viewModel: PostViewModel
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,9 +63,9 @@ fun PagesBar() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                ButtonPage({}, true)
-                ButtonPage({}, false)
-                ButtonPage({}, false)
+                viewModel.listPages.collectAsState().value.forEach { item ->
+                    ButtonPage({ viewModel.switchPages(item) }, viewModel, item)
+                }
             }
             IconButton(
                 onClick = {}
@@ -75,8 +82,10 @@ fun PagesBar() {
 @Composable
 fun ButtonPage(
     onClick: () -> Unit,
-    isCurrent: Boolean
+    viewModel: PostViewModel,
+    page: Int
 ) {
+    val number = viewModel.page.collectAsState().value
     OutlinedCard(
         modifier = Modifier
             .size(32.dp)
@@ -86,18 +95,14 @@ fun ButtonPage(
         ),
         border = BorderStroke(
             width = 2.dp,
-            color = if (isCurrent) {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            } else {
-                MaterialTheme.colorScheme.surfaceVariant
-            }
+            color = if (number == page) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            Text("1")
+            Text("$page")
         }
     }
 }
