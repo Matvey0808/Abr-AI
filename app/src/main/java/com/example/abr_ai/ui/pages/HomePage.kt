@@ -65,6 +65,7 @@ fun HomePage(viewModel: PostViewModel = viewModel()) {
                 }
 
                 is PostState.Success -> {
+                    val posts = (statePosts as PostState.Success).posts
                     PullToRefreshBox(
                         isRefreshing = viewModel.isLoading.collectAsState().value,
                         onRefresh = { viewModel.updatePosts() },
@@ -80,13 +81,13 @@ fun HomePage(viewModel: PostViewModel = viewModel()) {
                         }
                     ) {
                         LazyColumn(Modifier.fillMaxSize()) {
-                            items((statePosts as PostState.Success).posts.posts) { post ->
+                            items(posts.posts) { post ->
                                 PostCard(
                                     post
                                 )
                             }
                             item {
-                                PagesBar()
+                                PagesBar(viewModel)
                             }
                         }
                     }
