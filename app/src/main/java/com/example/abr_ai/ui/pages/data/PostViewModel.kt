@@ -23,11 +23,12 @@ class PostViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     private val _page = MutableStateFlow(1)
     private val _listPages = MutableStateFlow<List<Int>>(emptyList())
-    private val _lastPage = MutableStateFlow(5)
+    private val _lastPage = MutableStateFlow(0)
     val postState: StateFlow<PostState> = _postState.asStateFlow()
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
     val page: StateFlow<Int> = _page.asStateFlow()
     val listPages: StateFlow<List<Int>> = _listPages.asStateFlow()
+    val lastPage: StateFlow<Int> = _lastPage.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -60,28 +61,34 @@ class PostViewModel : ViewModel() {
         }
     }
 
-    suspend fun switchPages(number: Int) {
-        _page.value = number
+    suspend fun switchPages(number: Int, arrowOrNull: Int = -1) {
         val lastPage = _lastPage.value - 1
 
-        val start = number - 1
-        val end = number + 1
+        _page.value = when (arrowOrNull) {
+            1 -> _page.value + 1
+            2 -> _page.value - 1
+            else -> number
+        }
 
-        _listPages.value = if (number != lastPage) {
+        val currentPage = _page.value
+        val start = currentPage - 1
+        val end = currentPage + 1
+
+        _listPages.value = if (currentPage != lastPage) {
             when {
-                number >= lastPage - 1 -> listOf(1, -1, number - 1, number, number + 1)
-                number >= 3 -> listOf(1, -1, start, _page.value, end, -1, lastPage)
+                currentPage >= lastPage - 1 -> listOf(1, -1, start, currentPage, end)
+                currentPage >= 3 -> listOf(1, -1, start, currentPage, end, -1, lastPage)
                 else -> listOf(1, 2, 3, -1, lastPage)
             }
         } else {
-            listOf(1, -1, number - 2, number - 1, number)
+            listOf(1, -1, currentPage - 2, currentPage - 1, currentPage)
         }
-        fetchPosts(number)
+        fetchPosts(currentPage)
     }
 
-    fun switchUI(number: Int) {
+    fun switchUI(number: Int = 1, arrowOrNull: Int = -1) {
         viewModelScope.launch {
-            switchPages(number)
+            switchPages(number, arrowOrNull)
         }
     }
 }

@@ -52,7 +52,8 @@ fun PagesBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = {}
+                onClick = { viewModel.switchUI(arrowOrNull = 2) },
+                enabled = if (viewModel.page.collectAsState().value == 1) false else true
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -72,7 +73,8 @@ fun PagesBar(
                 }
             }
             IconButton(
-                onClick = {}
+                onClick = { viewModel.switchUI(arrowOrNull = 1) },
+                enabled = if (viewModel.page.collectAsState().value < viewModel.lastPage.collectAsState().value - 1) true else false
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowForward,
