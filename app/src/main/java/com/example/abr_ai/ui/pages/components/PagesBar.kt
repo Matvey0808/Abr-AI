@@ -67,7 +67,7 @@ fun PagesBar(
                     if (item == -1) {
                         Text("...")
                     } else {
-                        ButtonPage({ viewModel.switchPages(item) }, viewModel, item)
+                        ButtonPage({ viewModel.switchUI(item) }, viewModel, item)
                     }
                 }
             }
