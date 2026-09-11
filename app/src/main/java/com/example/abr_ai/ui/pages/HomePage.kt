@@ -29,72 +29,68 @@ import com.example.abr_ai.ui.pages.components.PagesBar
 import com.example.abr_ai.ui.pages.components.PostCard
 import com.example.abr_ai.ui.pages.data.PostState
 import com.example.abr_ai.ui.pages.data.network.RequestPost
+import com.example.abr_ai.ui.pages.themes.AbrTheme
 
 @ExperimentalMaterial3Api
 @Composable
 fun HomePage(viewModel: PostViewModel = viewModel()) {
-    val statePosts by viewModel.postState.collectAsState()
-    val stateIndicator = rememberPullToRefreshState()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                ),
-                title = {
-                    Text(
-                        "Abr",
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            when (statePosts) {
-                is PostState.Loading -> {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
+    AbrTheme(false) {
+        val statePosts by viewModel.postState.collectAsState()
+        val stateIndicator = rememberPullToRefreshState()
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "Abr",
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                when (statePosts) {
+                    is PostState.Loading -> {
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
+                    }
 
-                is PostState.Success -> {
-                    val posts = (statePosts as PostState.Success).posts
-                    PullToRefreshBox(
-                        isRefreshing = viewModel.isLoading.collectAsState().value,
-                        onRefresh = { viewModel.updatePosts() },
-                        state = stateIndicator,
-                        indicator = {
-                            Indicator(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                state = stateIndicator,
-                                isRefreshing = viewModel.isLoading.collectAsState().value,
-                                modifier = Modifier.align(Alignment.TopCenter)
-                            )
-                        }
-                    ) {
-                        LazyColumn(Modifier.fillMaxSize()) {
-                            items(posts.posts) { post ->
-                                PostCard(
-                                    post
+                    is PostState.Success -> {
+                        val posts = (statePosts as PostState.Success).posts
+                        PullToRefreshBox(
+                            isRefreshing = viewModel.isLoading.collectAsState().value,
+                            onRefresh = { viewModel.updatePosts() },
+                            state = stateIndicator,
+                            indicator = {
+                                Indicator(
+                                    state = stateIndicator,
+                                    isRefreshing = viewModel.isLoading.collectAsState().value,
+                                    modifier = Modifier.align(Alignment.TopCenter),
                                 )
                             }
-                            item {
-                                PagesBar(viewModel)
+                        ) {
+                            LazyColumn(Modifier.fillMaxSize()) {
+                                items(posts.posts) { post ->
+                                    PostCard(
+                                        post
+                                    )
+                                }
+                                item {
+                                    PagesBar(viewModel)
+                                }
                             }
                         }
                     }
-                }
-
-                is PostState.Error -> {
-                    Text((statePosts as PostState.Error).message)
+                    is PostState.Error -> {
+                        Text((statePosts as PostState.Error).message)
+                    }
                 }
             }
         }
