@@ -10,6 +10,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -22,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.abr_ai.ui.pages.data.PostViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,7 +36,7 @@ import com.example.abr_ai.ui.pages.themes.AbrTheme
 @ExperimentalMaterial3Api
 @Composable
 fun HomePage(viewModel: PostViewModel = viewModel()) {
-    AbrTheme(false) {
+    AbrTheme(viewModel.isDark.collectAsState().value) {
         val statePosts by viewModel.postState.collectAsState()
         val stateIndicator = rememberPullToRefreshState()
         Scaffold(
@@ -45,6 +47,13 @@ fun HomePage(viewModel: PostViewModel = viewModel()) {
                             "Abr",
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold
+                        )
+                    },
+                    actions = {
+                        Switch(
+                            checked = viewModel.isDark.collectAsState().value,
+                            { viewModel.switchTheme() },
+                            modifier = Modifier.padding(horizontal = 10.dp)
                         )
                     }
                 )
@@ -73,6 +82,8 @@ fun HomePage(viewModel: PostViewModel = viewModel()) {
                                     state = stateIndicator,
                                     isRefreshing = viewModel.isLoading.collectAsState().value,
                                     modifier = Modifier.align(Alignment.TopCenter),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    containerColor = MaterialTheme.colorScheme.onPrimary
                                 )
                             }
                         ) {
@@ -88,6 +99,7 @@ fun HomePage(viewModel: PostViewModel = viewModel()) {
                             }
                         }
                     }
+
                     is PostState.Error -> {
                         Text((statePosts as PostState.Error).message)
                     }

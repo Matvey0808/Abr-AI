@@ -40,8 +40,8 @@ fun PagesBar(
             .padding(horizontal = 6.dp)
             .height(48.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.primary
         )
     ) {
         Row(
@@ -97,11 +97,11 @@ fun ButtonPage(
             .size(32.dp)
             .clickable(onClick = onClick, indication = null, interactionSource = null),
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.onPrimary
         ),
         border = BorderStroke(
             width = 2.dp,
-            color = if (number == page) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.surfaceVariant
+            color = if (number == page) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary
         )
     ) {
         Box(
