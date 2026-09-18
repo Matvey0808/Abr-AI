@@ -47,6 +47,7 @@ class PostViewModel : ViewModel() {
             _postState.value = PostState.Success(RequestPost(posts.posts))
         } catch (e: Exception) {
             _postState.value = PostState.Error("unknown error: $e")
+            Log.d("ERROR", "$e")
         }
     }
 
@@ -59,6 +60,7 @@ class PostViewModel : ViewModel() {
                 _isLoading.value = false
             } catch (e: Exception) {
                 _postState.value = PostState.Error("unknown error: $e")
+                Log.d("ERROR", "$e")
             }
         }
     }

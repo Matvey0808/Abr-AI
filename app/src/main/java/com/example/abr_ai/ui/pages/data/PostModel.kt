@@ -1,5 +1,8 @@
 package com.example.abr_ai.ui.pages.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class PostModel(
     val user: String,
     val title: String,
@@ -7,7 +10,7 @@ data class PostModel(
     val time: String,
     val views: String,
     val description: String,
-    val image: String,
+    val image: String?,
     val date: String,
     val link: String
 )
