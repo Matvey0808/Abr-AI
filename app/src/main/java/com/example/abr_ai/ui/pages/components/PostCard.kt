@@ -30,12 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import com.example.abr_ai.Routes
 import com.example.abr_ai.ui.pages.data.PostModel
 
 @Composable
 fun PostCard(
-    model: PostModel
+    model: PostModel,
+    navController: NavController
 ) {
     Card(
         modifier = Modifier
@@ -45,7 +48,7 @@ fun PostCard(
                 interactionSource = null,
                 indication = null,
                 onClick = {
-                    Log.d("CARD", "CLICK")
+                    navController.navigate(Routes.Content.route)
                 }
             ),
         colors = CardDefaults.cardColors(

@@ -16,12 +16,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.abr_ai.Routes
 import com.example.abr_ai.ui.pages.data.PostViewModel
 import com.example.abr_ai.ui.pages.themes.AbrTheme
 
 @ExperimentalMaterial3Api
 @Composable
-fun ContentPage(viewModel: PostViewModel = PostViewModel()) {
+fun ContentPage(viewModel: PostViewModel = PostViewModel(), navController: NavController) {
     AbrTheme(viewModel.isDark.collectAsState().value) {
         Scaffold(
             topBar = {
@@ -30,7 +32,9 @@ fun ContentPage(viewModel: PostViewModel = PostViewModel()) {
                         Text("Abr", fontSize = 26.sp, fontWeight = FontWeight.Bold)
                     },
                     navigationIcon = {
-                        IconButton({}) {
+                        IconButton({
+                            navController.navigate(Routes.Home.route)
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBackIosNew,
                                 contentDescription = "back"
