@@ -45,6 +45,7 @@ class PostViewModel : ViewModel() {
             val posts = RetrofitClient.apiService.getPosts(page = page)
             _lastPage.value = posts.last.toInt()
             _postState.value = PostState.Success(RequestPost(posts.posts))
+            Log.d("POST_DATA", "${posts.posts}")
         } catch (e: Exception) {
             _postState.value = PostState.Error("unknown error: $e")
             Log.d("ERROR", "$e")
