@@ -10,6 +10,7 @@ object RetrofitClient {
     private val json = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
+        classDiscriminator = "type"
     }
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://vipini.site/")

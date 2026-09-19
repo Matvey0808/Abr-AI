@@ -10,8 +10,8 @@ interface ApiService {
         @Query("limit") limit: Int = 20,
         @Query("page") page: Int
     ): RequestPost
-    @GET("/posts/out{post_link}")
+    @GET("/posts/content{link_post}")
     suspend fun getPostInfo(
-        @Path("post_link") post: String
-    )
+        @Path("link_post") post: String
+    ): RequestContent
 }
