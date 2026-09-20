@@ -13,7 +13,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -27,16 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.abr_ai.ui.pages.data.PostViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.abr_ai.ui.pages.components.PagesBar
 import com.example.abr_ai.ui.pages.components.PostCard
 import com.example.abr_ai.ui.pages.data.PostState
-import com.example.abr_ai.ui.pages.data.network.RequestPost
 import com.example.abr_ai.ui.pages.themes.AbrTheme
 
 @ExperimentalMaterial3Api
 @Composable
-fun HomePage(viewModel: PostViewModel = viewModel(), navController: NavController) {
+fun HomePage(viewModel: PostViewModel = viewModel(), toContent: () -> Unit) {
     AbrTheme(viewModel.isDark.collectAsState().value) {
         val statePosts by viewModel.postState.collectAsState()
         val stateIndicator = rememberPullToRefreshState()
@@ -92,7 +89,7 @@ fun HomePage(viewModel: PostViewModel = viewModel(), navController: NavControlle
                                 items(posts.posts) { post ->
                                     PostCard(
                                         post,
-                                        navController
+                                        toContent
                                     )
                                 }
                                 item {

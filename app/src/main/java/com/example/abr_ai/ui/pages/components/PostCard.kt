@@ -1,7 +1,5 @@
 package com.example.abr_ai.ui.pages.components
 
-import android.util.Log
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +16,6 @@ import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,15 +27,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import com.example.abr_ai.Routes
 import com.example.abr_ai.ui.pages.data.PostModel
 
 @Composable
 fun PostCard(
     model: PostModel,
-    navController: NavController
+    toContent: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -47,9 +42,7 @@ fun PostCard(
             .clickable(
                 interactionSource = null,
                 indication = null,
-                onClick = {
-                    navController.navigate(Routes.Content.route)
-                }
+                onClick = toContent
             ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onPrimary
