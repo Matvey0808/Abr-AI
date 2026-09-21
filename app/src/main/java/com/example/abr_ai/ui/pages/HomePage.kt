@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.abr_ai.ui.pages.data.PostViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.abr_ai.MainViewModel
 import com.example.abr_ai.ui.pages.components.PagesBar
 import com.example.abr_ai.ui.pages.components.PostCard
 import com.example.abr_ai.ui.pages.data.PostState
@@ -33,8 +34,12 @@ import com.example.abr_ai.ui.pages.themes.AbrTheme
 
 @ExperimentalMaterial3Api
 @Composable
-fun HomePage(viewModel: PostViewModel = viewModel(), toContent: () -> Unit) {
-    AbrTheme(viewModel.isDark.collectAsState().value) {
+fun HomePage(
+    viewModel: PostViewModel = viewModel(),
+    globalViewModel: MainViewModel = viewModel(),
+    toContent: () -> Unit
+) {
+    AbrTheme(globalViewModel.isDark.collectAsState().value) {
         val statePosts by viewModel.postState.collectAsState()
         val stateIndicator = rememberPullToRefreshState()
         Scaffold(
@@ -49,8 +54,8 @@ fun HomePage(viewModel: PostViewModel = viewModel(), toContent: () -> Unit) {
                     },
                     actions = {
                         Switch(
-                            checked = viewModel.isDark.collectAsState().value,
-                            { viewModel.switchTheme() },
+                            checked = globalViewModel.isDark.collectAsState().value,
+                            { globalViewModel.switchingTheme() },
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
                     }

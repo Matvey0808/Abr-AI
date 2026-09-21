@@ -24,13 +24,11 @@ class PostViewModel : ViewModel() {
     private val _page = MutableStateFlow(1)
     private val _listPages = MutableStateFlow<List<Int>>(emptyList())
     private val _lastPage = MutableStateFlow(0)
-    private val _isDark = MutableStateFlow(false)
     val postState: StateFlow<PostState> = _postState.asStateFlow()
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
     val page: StateFlow<Int> = _page.asStateFlow()
     val listPages: StateFlow<List<Int>> = _listPages.asStateFlow()
     val lastPage: StateFlow<Int> = _lastPage.asStateFlow()
-    val isDark: StateFlow<Boolean> = _isDark.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -95,9 +93,5 @@ class PostViewModel : ViewModel() {
         viewModelScope.launch {
             switchPages(number, arrowOrNull)
         }
-    }
-
-    fun switchTheme() {
-        _isDark.value = !_isDark.value
     }
 }

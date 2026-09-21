@@ -16,13 +16,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.abr_ai.MainViewModel
 import com.example.abr_ai.ui.pages.data.PostViewModel
 import com.example.abr_ai.ui.pages.themes.AbrTheme
 
 @ExperimentalMaterial3Api
 @Composable
-fun ContentPage(viewModel: PostViewModel = PostViewModel(), toBack: () -> Unit) {
-    AbrTheme(viewModel.isDark.collectAsState().value) {
+fun ContentPage(globalViewModel: MainViewModel = viewModel(), toBack: () -> Unit) {
+    AbrTheme(globalViewModel.isDark.collectAsState().value) {
         Scaffold(
             topBar = {
                 TopAppBar(
